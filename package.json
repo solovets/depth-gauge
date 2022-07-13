@@ -1,0 +1,25 @@
+{
+    "name": "deph-gauge",
+    "version": "1.0.0",
+    "description": "Returns depth of provided path(s)",
+    "main": "index.js",
+    "scripts": {
+      
+    },
+    "repository": {
+      "type": "git",
+      "url": "git://github.com/Itentika/depth-gauge.git"
+    },
+    "keywords": [
+      "depth",
+      "path",
+      "path depth"
+    ],
+    "author": "Itentika",
+    "license": "UNLICENSED",
+    "bugs": {
+      "url": "https://github.com/Itentika/depth-gauge/issues"
+    },
+    "homepage": "https://github.com/Itentika/depth-gauge#readme"
+  }
+  
