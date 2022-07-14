@@ -10,8 +10,6 @@ _Returns depth of provided path(s)_
 npm i depth-gauge
 ```
 
-### Usage: basic
-
 After defining `path-gauge` in your script:
 
 ```js
