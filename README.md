@@ -2,6 +2,8 @@
 
 _Returns depth of provided path(s)_
 
+[![Created by Itentika](https://img.shields.io/badge/Created%20by-Itentika-blue)](https://itentika.ru)
+
 ### Install
 
 ```
@@ -16,18 +18,58 @@ After defining `path-gauge` in your script:
 const depth = require('depth-gauge');
 ```
 
-you can use `depth-gauge` asynchronously:
+you can use `depth-gauge` synchronously:
 
 ```js
-depth(paths [, options])
-    .then(data => console.log(data))
-    .catch(error => console.log(':-('))
+const myDepths = depth(paths [, options, callback]);
 ```
 
-or synchronously:
+or asynchronously:
 
 ```js
-const myDepths = depth.sync(paths [, options, callback]);
+depth.async(paths [, options])
+    .then(data => /* do stuff */)
+    .catch(error => /* error */)
+```
+
+### Usage: sync
+
+```js
+const depth = require('depth-gauge');
+
+const paths = [
+    'a/b/c',
+    './',
+    '../../d/',
+    'e\\f\\g',
+    '\\h\\..\\i'
+];
+
+function cb() {
+    console.log('done');
+}
+
+const var1 = depth('a/b/c');
+// var1 = 3
+
+const var2 = depth(paths);
+// var2 = [
+//     { path: 'a/b/c',      depth: 3 },
+//     { path: './',         depth: 0 },
+//     { path: '../../d/',   depth: -1 },
+//     { path: 'e\\f\\g',    depth: 3 },
+//     { path: '\\h\\..\\i', depth: 1 }
+// ]
+
+const var3 = depth(paths, cb);
+// => done
+// var3 = [
+//     { path: 'a/b/c',      depth: 3 },
+//     { path: './',         depth: 0 },
+//     { path: '../../d/',   depth: -1 },
+//     { path: 'e\\f\\g',    depth: 3 },
+//     { path: '\\h\\..\\i', depth: 1 }
+// ]
 ```
 
 ### Usage: async
@@ -37,12 +79,12 @@ const myDepths = depth.sync(paths [, options, callback]);
 ```js
 const depth = require('depth-gauge');
 
-depth('a/b/c')
+depth.async('a/b/c')
     .then(data => {
         console.log(data);
         // => 3
     })
-    .catch(error => console.log('ooops'));
+    .catch(error => console.log(error));
 ```
 
 **Multiple paths**
@@ -58,7 +100,7 @@ const paths = [
     '\\h\\..\\i'
 ];
 
-depth(paths)
+depth.async(paths)
     .then(data => {
         console.log(data);
         /* =>
@@ -74,32 +116,14 @@ depth(paths)
     .catch(error => console.log(error));
 ```
 
-### Usage: sync
-
-```js
-const depth = require('depth-gauge');
-
-function cb() {
-    console.log('Great!');
-}
-
-const var1 = depth.sync('a/b/c');
-// var1 = 3
-
-const var2 = depth.sync(['a/b/c', './']);
-// var2 = [{path: 'a/b/c', depth: 3}, {path: './', depth: 0}]
-
-const var3 = depth.sync(['a/b/c', './'], cb);
-// => Great!
-// var3 = [{path: 'a/b/c', depth: 3}, {path: './', depth: 0}]
-```
-
 ### Options
 
 **`sort`**
+
 Sorts result in ascending or descending order. Works for multiple paths.
 
 Possible values: `'ASC'` | `'DESC'`
+
 Default value: `undefined`
 
 ```js
@@ -113,7 +137,7 @@ const paths = [
     '\\h\\..\\i'
 ];
 
-depth(paths, {
+depth.async(paths, {
     sort: 'ASC'
 })
     .then(data => {
@@ -128,12 +152,12 @@ depth(paths, {
         ]
         */
     })
-    .catch(error => console.log('ooops'));
+    .catch(error => console.log(error));
 ```
 
 ### callback(result, originalInput)
 
-`callback` is a link to a callback function, that takes two arguments: `result` and `originalInput`.
+`callback` is a link to a callback function of synchronous call, that takes two arguments: `result` and `originalInput`.
 
 ```js
 const depth = require('depth-gauge');
@@ -143,13 +167,31 @@ function cb(result, originalInput) {
     console.log('Original input:', originalInput);
 }
 
-const var4 = depth.sync(['\\h\\..\\i', '../../d/'], cb);
-// => Result: [{path: '\\h\\..\\i', depth: 1}, {path: '../../d/', depth: -1}]
-// => Original input: ['\\h\\..\\i', '../../d/']
-// var4 = [{path: '\\h\\..\\i', depth: 1}, {path: '../../d/', depth: -1}]
+const var4 = depth(['\\h\\..\\i', '../../d/'], cb);
+// => Result: [ { path: '\\h\\..\\i', depth: 1 }, { path: '../../d/', depth: -1 } ]
+// => Original input: [ '\\h\\..\\i', '../../d/' ]
+// var4 = [
+//     {
+//         "path": "\\h\\..\\i",
+//         "depth": 1
+//     },
+//     {
+//         "path": "../../d/",
+//         "depth": -1
+//     }
+// ]
 
-const var5 = depth.sync(['\\h\\..\\i', '../../d/'], {sort: 'ASC'}, cb);
-// => Result: [{path: '../../d/', depth: -1}, {path: '\\h\\..\\i', depth: 1}]
-// => Original input: ['\\h\\..\\i', '../../d/']
-// var5 = [{path: '../../d/', depth: -1}, {path: '\\h\\..\\i', depth: 1}]
+const var5 = depth(['\\h\\..\\i', '../../d/'], {sort: 'ASC'}, cb);
+// => Result: [ { path: '../../d/', depth: -1 }, { path: '\\h\\..\\i', depth: 1 } ]
+// => Original input: [ '\\h\\..\\i', '../../d/' ]
+// var5 = [
+//     {
+//         "path": "../../d/",
+//         "depth": -1
+//     },
+//     {
+//         "path": "\\h\\..\\i",
+//         "depth": 1
+//     }
+// ]
 ```

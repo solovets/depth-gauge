@@ -2,30 +2,7 @@ const checkOptions = require('./helpers/check-options');
 const pathsParamData   = require('./helpers/paths-param');
 const fulfillReturn   = require('./helpers/fulfill-return');
 
-
-const depthGauge = async function (paths, options) {
-
-    let _OPTIONS = checkOptions(options);
-
-    const pathsParam = pathsParamData(paths);
-
-    let _PATHS;
-
-    if (pathsParam.valid === true) {
-        _PATHS = paths;
-    } else {
-        throw new Error(pathsParam.message);
-    }
-
-    _OPTIONS.single = pathsParam.type === 'string';
-
-    let _RETURN = fulfillReturn(_OPTIONS, _PATHS);
-
-    return _RETURN;
-
-};
-
-const depthGaugeSync = function (paths, options, callback) {
+const depthGauge = function (paths, options, callback) {
 
     let _OPTIONS;
 
@@ -62,6 +39,28 @@ const depthGaugeSync = function (paths, options, callback) {
     return _RETURN;
 }
 
+const depthGaugeAsync = async function (paths, options) {
+
+    let _OPTIONS = checkOptions(options);
+
+    const pathsParam = pathsParamData(paths);
+
+    let _PATHS;
+
+    if (pathsParam.valid === true) {
+        _PATHS = paths;
+    } else {
+        throw new Error(pathsParam.message);
+    }
+
+    _OPTIONS.single = pathsParam.type === 'string';
+
+    let _RETURN = fulfillReturn(_OPTIONS, _PATHS);
+
+    return _RETURN;
+
+};
+
 module.exports = depthGauge;
 
-module.exports.sync = depthGaugeSync;
+module.exports.async = depthGaugeAsync;

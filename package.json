@@ -13,9 +13,11 @@
     "keywords": [
       "depth",
       "path",
-      "path depth"
+      "normalize",
+      "separator",
+      "absolute"
     ],
-    "author": "Itentika",
+    "author": "Itentika (https://itentika.ru)",
     "license": "UNLICENSED",
     "bugs": {
       "url": "https://github.com/Itentika/depth-gauge/issues"
