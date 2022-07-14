@@ -32,6 +32,18 @@ depth.async(paths [, options])
 
 ### Usage: sync
 
+**Single path**
+
+```js
+const var1 = depth('a/b/c');      // var1 = 3
+const var2 = depth('./');         // var2 = 0
+const var3 = depth('../../d/');   // var3 = -1
+const var4 = depth('e\\f\\g');    // var4 = 3
+const var5 = depth('\\h\\..\\i'); // var5 = 1
+```
+
+**Multiple paths**
+
 ```js
 const depth = require('depth-gauge');
 
@@ -47,11 +59,8 @@ function cb() {
     console.log('done');
 }
 
-const var1 = depth('a/b/c');
-// var1 = 3
-
-const var2 = depth(paths);
-// var2 = [
+const var6 = depth(paths);
+// var6 = [
 //     { path: 'a/b/c',      depth: 3 },
 //     { path: './',         depth: 0 },
 //     { path: '../../d/',   depth: -1 },
@@ -59,9 +68,9 @@ const var2 = depth(paths);
 //     { path: '\\h\\..\\i', depth: 1 }
 // ]
 
-const var3 = depth(paths, cb);
+const var7 = depth(paths, cb);
 // => done
-// var3 = [
+// var7 = [
 //     { path: 'a/b/c',      depth: 3 },
 //     { path: './',         depth: 0 },
 //     { path: '../../d/',   depth: -1 },
@@ -165,7 +174,7 @@ function cb(result, originalInput) {
     console.log('Original input:', originalInput);
 }
 
-const var4 = depth(['\\h\\..\\i', '../../d/'], cb);
+const var8 = depth(['\\h\\..\\i', '../../d/'], cb);
 // => Result: [ { path: '\\h\\..\\i', depth: 1 }, { path: '../../d/', depth: -1 } ]
 // => Original input: [ '\\h\\..\\i', '../../d/' ]
 // var4 = [
@@ -179,7 +188,7 @@ const var4 = depth(['\\h\\..\\i', '../../d/'], cb);
 //     }
 // ]
 
-const var5 = depth(['\\h\\..\\i', '../../d/'], {sort: 'ASC'}, cb);
+const var9 = depth(['\\h\\..\\i', '../../d/'], {sort: 'ASC'}, cb);
 // => Result: [ { path: '../../d/', depth: -1 }, { path: '\\h\\..\\i', depth: 1 } ]
 // => Original input: [ '\\h\\..\\i', '../../d/' ]
 // var5 = [
