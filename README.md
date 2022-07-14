@@ -1,4 +1,4 @@
-# Depth-gauge
+# depth-gauge
 
 _Returns depth of provided path(s)_
 
