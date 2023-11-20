@@ -2,8 +2,6 @@
 
 _Returns depth of provided path(s)_
 
-[![Created by Itentika](https://img.shields.io/badge/Created%20by-Itentika-blue)](https://itentika.ru)
-
 ### Install
 
 ```
