@@ -1,5 +1,5 @@
 import { checkOptions } from './helpers-module/check-options.mjs';
-import { unifyPathsParam } from './helpers-module/paths-param.mjs';
+import { ensurePathsParam } from './helpers-module/paths-param.mjs';
 import { fulfillReturn } from './helpers-module/fulfill-return.mjs';
 
 export const depthGauge = function (pathsArg, optionsObj, callbackFn) {
@@ -25,7 +25,7 @@ export const depthGauge = function (pathsArg, optionsObj, callbackFn) {
             break;
     }
 
-    const paths = unifyPathsParam(pathsArg);
+    const paths = ensurePathsParam(pathsArg);
 
     const result = fulfillReturn(options, paths);
 
@@ -40,7 +40,7 @@ export const depthGaugeAsync = async function (pathsArg, optionsObj) {
 
     let options = checkOptions(optionsObj);
 
-    const paths = unifyPathsParam(pathsArg);
+    const paths = ensurePathsParam(pathsArg);
 
     const result = fulfillReturn(options, paths);
 

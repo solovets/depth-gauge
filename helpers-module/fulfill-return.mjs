@@ -4,15 +4,14 @@ export const fulfillReturn = (options, paths) => {
 
     let result;
 
-    switch (paths.length === 1) {
-        case true:
-            let item = paths[0];
+    switch (typeof paths) {
+        case 'string':
             result = {
-                path: item,
-                depth: getDepth(item)
+                path: paths,
+                depth: getDepth(paths)
             };
             break;
-        case false:
+        default:
             let arr = [];
             for (let i = 0; i < paths.length; i++) {
                 let item = paths[i];

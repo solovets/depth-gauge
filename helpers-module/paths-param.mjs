@@ -40,16 +40,11 @@ export const isPathsParamValid = (pathsOption) => {
     return result;
 };
 
-export const unifyPathsParam = (paths, options) => {
+export const ensurePathsParam = (paths) => {
     const isValid = isPathsParamValid(paths);
     
     if (isValid.valid === true) {
-        switch (isValid.type) {
-            case 'object':
-                return paths;
-            case 'string':
-                return [paths];
-        }
+        return paths;
     } else {
         throw new Error(isValid.message);
     }
