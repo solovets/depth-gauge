@@ -1,6 +1,6 @@
-const checkOptions = require('./helpers/check-options');
-const pathsParamData   = require('./helpers/paths-param');
-const fulfillReturn   = require('./helpers/fulfill-return');
+const checkOptions = require('./helpers-require/check-options');
+const pathsParamData   = require('./helpers-require/paths-param');
+const fulfillReturn   = require('./helpers-require/fulfill-return');
 
 const depthGauge = function (paths, options, callback) {
 
@@ -11,7 +11,7 @@ const depthGauge = function (paths, options, callback) {
             callback = arguments[1];
             _OPTIONS = checkOptions(null);
         } else {
-            callback = null;
+            callback = undefined;
             _OPTIONS = checkOptions(options);
         }
     } else {
@@ -35,7 +35,7 @@ const depthGauge = function (paths, options, callback) {
     if (callback && Object.prototype.toString.call(callback) === '[object Function]') {
         callback(_RETURN, _PATHS);
     }
-
+     
     return _RETURN;
 }
 

@@ -37,7 +37,7 @@ const isPathsOptionValid = function(pathsOption) {
 
     return {
         valid: false,
-        message: `[depth-gauge] Unexpected error of 'paths' option. Expected 'string' or 'string'[], got ${typeof pathsOption}`
+        message: `[depth-gauge] 'paths' argument must be of type String | String[], got ${typeof paths}`
     }
 };
 

@@ -11,21 +11,29 @@ npm i depth-gauge
 After defining `path-gauge` in your script:
 
 ```js
-const depth = require('depth-gauge');
+// cjs syntax
+const depthGauge = require('depth-gauge');
+// or mjs syntax
+import { depthGauge, depthGaugeAsync } from 'depth-gauge';
 ```
 
 you can use `depth-gauge` synchronously:
 
 ```js
-const myDepths = depth(paths [, options, callback]);
+const myDepths = depthGauge(paths [, options, callback]);
 ```
 
 or asynchronously:
 
 ```js
-depth.async(paths [, options])
+// cjs
+depthGauge.async(paths [, options])
     .then(data => /* do stuff */)
-    .catch(error => /* error */)
+    .catch(error => /* error */);
+// mjs
+depthGaugeAsync(paths [, options])
+    .then(data => /* do stuff */)
+    .catch(error => /* error */);
 ```
 
 ### Usage: sync
