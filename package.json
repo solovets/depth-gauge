@@ -1,7 +1,7 @@
 {
     "name": "deph-gauge",
     "type": "module",
-    "version": "1.4.0",
+    "version": "1.4.1",
     "description": "Returns depth of provided path(s)",
     "exports": {
         "import": "./index-module.mjs",
