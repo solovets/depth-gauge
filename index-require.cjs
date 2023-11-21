@@ -1,66 +1,52 @@
-const checkOptions = require('./helpers-require/check-options');
-const pathsParamData   = require('./helpers-require/paths-param');
-const fulfillReturn   = require('./helpers-require/fulfill-return');
+const checkOptions  = require('./helpers-require/check-options.cjs');
+const ensurePathsParam = require('./helpers-require/paths-param.cjs');
+const fulfillReturn = require('./helpers-require/fulfill-return.cjs');
 
-const depthGauge = function (paths, options, callback) {
+const depthGauge = function (pathsArg, optionsObj, callbackFn) {
 
-    let _OPTIONS;
+    let options;
+    let callback;
 
-    if (arguments.length == 2) {
-        if (Object.prototype.toString.call(arguments[1]) === '[object Function]') {
-            callback = arguments[1];
-            _OPTIONS = checkOptions(null);
-        } else {
-            callback = undefined;
-            _OPTIONS = checkOptions(options);
-        }
-    } else {
-        _OPTIONS = checkOptions(options);
+    switch (arguments.length) {
+        case 3:
+            options = checkOptions(optionsObj);
+            callback = callbackFn;
+            break;
+        case 2:
+            if (Object.prototype.toString.call(arguments[1]) === '[object Function]') {
+                callback = arguments[1];
+                options = checkOptions(null);
+            } else {
+                options = checkOptions(optionsObj);
+            }
+            break;
+        default:
+            options = checkOptions(null);
+            break;
     }
 
-    const pathsParam = pathsParamData(paths);
+    const paths = ensurePathsParam(pathsArg);
 
-    let _PATHS;
+    const result = fulfillReturn(options, paths);
 
-    if (pathsParam.valid === true) {
-        _PATHS = paths;
-    } else {
-        throw new Error(pathsParam.message);
-    }
-
-    _OPTIONS.single = pathsParam.type === 'string';
-
-    let _RETURN = fulfillReturn(_OPTIONS, _PATHS);
-
-    if (callback && Object.prototype.toString.call(callback) === '[object Function]') {
-        callback(_RETURN, _PATHS);
-    }
+    if (callback) callback(result, paths);
      
-    return _RETURN;
+    return result;
+
+     
 }
 
-const depthGaugeAsync = async function (paths, options) {
+const depthGaugeAsync = async function (pathsArg, optionsObj) {
 
-    let _OPTIONS = checkOptions(options);
+    let options = checkOptions(optionsObj);
 
-    const pathsParam = pathsParamData(paths);
+    const paths = ensurePathsParam(pathsArg);
 
-    let _PATHS;
+    const result = fulfillReturn(options, paths);
 
-    if (pathsParam.valid === true) {
-        _PATHS = paths;
-    } else {
-        throw new Error(pathsParam.message);
-    }
-
-    _OPTIONS.single = pathsParam.type === 'string';
-
-    let _RETURN = fulfillReturn(_OPTIONS, _PATHS);
-
-    return _RETURN;
+    return result;
 
 };
 
 module.exports = depthGauge;
-
 module.exports.async = depthGaugeAsync;
