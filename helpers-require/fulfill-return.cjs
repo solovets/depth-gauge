@@ -1,6 +1,6 @@
-import { getDepth } from "./get-depth.mjs";
+const getDepth = require('./get-depth.cjs');
 
-export const fulfillReturn = (options, paths) => {
+module.exports = function(options, paths) {
 
     let result;
 
@@ -23,6 +23,7 @@ export const fulfillReturn = (options, paths) => {
             result = arr;
             break;
     }
+
 
     if (
         typeof paths === 'object' &&
