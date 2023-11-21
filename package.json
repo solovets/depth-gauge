@@ -1,27 +1,31 @@
 {
     "name": "deph-gauge",
-    "version": "1.0.0",
+    "type": "module",
+    "version": "1.1.0",
     "description": "Returns depth of provided path(s)",
-    "main": "index.js",
-    "scripts": {
-      
+    "exports": {
+        "import": "./index-module.mjs",
+        "require": "./index-require.cjs"
     },
+    "scripts": {},
     "repository": {
-      "type": "git",
-      "url": "git://github.com/Itentika/depth-gauge.git"
+        "type": "git",
+        "url": "git://github.com/solovets/depth-gauge.git"
     },
     "keywords": [
-      "depth",
-      "path",
-      "normalize",
-      "separator",
-      "absolute"
+        "depth",
+        "path",
+        "normalize",
+        "separator",
+        "absolute"
     ],
-    "author": "Itentika (https://itentika.ru)",
+    "author": "Denis Solovets",
     "license": "UNLICENSED",
     "bugs": {
-      "url": "https://github.com/Itentika/depth-gauge/issues"
+        "url": "https://github.com/solovets/depth-gauge/issues"
     },
-    "homepage": "https://github.com/Itentika/depth-gauge#readme"
-  }
-  
+    "homepage": "https://github.com/solovets/depth-gauge#readme",
+    "dependencies": {
+        "chalk": "^5.3.0"
+    }
+}

@@ -1,6 +1,6 @@
-# depth-gauge
+# depth-gauge [![NPM version](https://badge.fury.io/js/deph-gauge.svg)](http://badge.fury.io/js/deph-gauge)
 
-_Returns depth of provided path(s)_
+_Returns depth of provided path(s), sync/async, cjs/mjs_
 
 ### Install
 
@@ -41,18 +41,16 @@ depthGaugeAsync(paths [, options])
 **Single path**
 
 ```js
-const var1 = depth('a/b/c');      // var1 = 3
-const var2 = depth('./');         // var2 = 0
-const var3 = depth('../../d/');   // var3 = -1
-const var4 = depth('e\\f\\g');    // var4 = 3
-const var5 = depth('\\h\\..\\i'); // var5 = 1
+depthGauge('a/b/c');      // { path: 'a/b/c', depth: 3 }
+depthGauge('./');         // { path: './', depth: 0 }
+depthGauge('../../d/');   // { path: '../../d/', depth: -1 }
+depthGauge('e\\f\\g');    // { path: 'e\\f\\g', depth: 3 }
+depthGauge('\\h\\..\\i'); // { path: '\\h\\..\\i', depth: 1 }
 ```
 
 **Multiple paths**
 
 ```js
-const depth = require('depth-gauge');
-
 const paths = [
     'a/b/c',
     './',
@@ -61,28 +59,40 @@ const paths = [
     '\\h\\..\\i'
 ];
 
-function cb() {
-    console.log('done');
+const options = { sort: 'ASC' };
+
+const cb = (result, originalInput) => {
+    console.log(result);
+    console.log(originalInput);
 }
 
-const var6 = depth(paths);
-// var6 = [
-//     { path: 'a/b/c',      depth: 3 },
-//     { path: './',         depth: 0 },
-//     { path: '../../d/',   depth: -1 },
-//     { path: 'e\\f\\g',    depth: 3 },
-//     { path: '\\h\\..\\i', depth: 1 }
-// ]
+depthGauge(paths, cb);
+/*
+console.log(result):
+[
+    { path: 'a/b/c', depth: 3 },
+    { path: './', depth: 0 },
+    { path: '../../d/', depth: -1 },
+    { path: 'e\\f\\g', depth: 3 },
+    { path: '\\h\\..\\i', depth: 1 }
+]
+console.log(originalInput):
+[ 'a/b/c', './', '../../d/', 'e\\f\\g', '\\h\\..\\i' ]
+*/
 
-const var7 = depth(paths, cb);
-// => done
-// var7 = [
-//     { path: 'a/b/c',      depth: 3 },
-//     { path: './',         depth: 0 },
-//     { path: '../../d/',   depth: -1 },
-//     { path: 'e\\f\\g',    depth: 3 },
-//     { path: '\\h\\..\\i', depth: 1 }
-// ]
+depthGauge(paths, options, cb);
+/*
+console.log(result):
+[
+    { path: '../../d/', depth: -1 },
+    { path: './', depth: 0 },
+    { path: '\\h\\..\\i', depth: 1 },
+    { path: 'a/b/c', depth: 3 },
+    { path: 'e\\f\\g', depth: 3 }
+]
+console.log(originalInput):
+[ 'a/b/c', './', '../../d/', 'e\\f\\g', '\\h\\..\\i' ]
+*/
 ```
 
 ### Usage: async
@@ -90,12 +100,10 @@ const var7 = depth(paths, cb);
 **Single path**
 
 ```js
-const depth = require('depth-gauge');
-
-depth.async('a/b/c')
+// cjs syntac
+depthGauge.async('a/b/c')
     .then(data => {
-        console.log(data);
-        // => 3
+        // data = { path: 'a/b/c', depth: 3 }
     })
     .catch(error => console.log(error));
 ```
@@ -103,7 +111,7 @@ depth.async('a/b/c')
 **Multiple paths**
 
 ```js
-const depth = require('depth-gauge');
+// mjs syntax
 
 const paths = [
     'a/b/c',
@@ -113,17 +121,18 @@ const paths = [
     '\\h\\..\\i'
 ];
 
-depth.async(paths)
+const options = { sort: 'DESC' };
+
+depthGaugeAsync(paths, options)
     .then(data => {
-        console.log(data);
-        /* =>
-        [
-            { path: 'a/b/c',      depth: 3 },
-            { path: './',         depth: 0 },
-            { path: '../../d/',   depth: -1 },
-            { path: 'e\\f\\g',    depth: 3 },
-            { path: '\\h\\..\\i', depth: 1 }
-        ]
+        /* data =
+            [
+                { path: 'a/b/c', depth: 3 },
+                { path: 'e\\f\\g', depth: 3 },
+                { path: '\\h\\..\\i', depth: 1 },
+                { path: './', depth: 0 },
+                { path: '../../d/', depth: -1 }
+            ]
         */
     })
     .catch(error => console.log(error));
@@ -131,7 +140,7 @@ depth.async(paths)
 
 ### Options
 
-**`sort`**
+**`options.sort`**
 
 Sorts result in ascending or descending order. Works for multiple paths.
 
@@ -139,72 +148,6 @@ Possible values: `'ASC'` | `'DESC'`
 
 Default value: `undefined`
 
-```js
-const depth = require('./depth-gauge');
-
-const paths = [
-    'a/b/c',
-    './',
-    '../../d/',
-    'e\\f\\g',
-    '\\h\\..\\i'
-];
-
-depth.async(paths, {
-    sort: 'ASC'
-})
-    .then(data => {
-        console.log(data);
-        /* =>
-        [
-            { path: '../../d/',   depth: -1 },
-            { path: './',         depth: 0 },
-            { path: '\\h\\..\\i', depth: 1 },
-            { path: 'a/b/c',      depth: 3 },
-            { path: 'e\\f\\g',    depth: 3 }
-        ]
-        */
-    })
-    .catch(error => console.log(error));
-```
-
 ### callback(result, originalInput)
 
 `callback` is a link to a callback function of synchronous call, that takes two arguments: `result` and `originalInput`.
-
-```js
-const depth = require('depth-gauge');
-
-function cb(result, originalInput) {
-    console.log('Result:', result);
-    console.log('Original input:', originalInput);
-}
-
-const var8 = depth(['\\h\\..\\i', '../../d/'], cb);
-// => Result: [ { path: '\\h\\..\\i', depth: 1 }, { path: '../../d/', depth: -1 } ]
-// => Original input: [ '\\h\\..\\i', '../../d/' ]
-// var4 = [
-//     {
-//         "path": "\\h\\..\\i",
-//         "depth": 1
-//     },
-//     {
-//         "path": "../../d/",
-//         "depth": -1
-//     }
-// ]
-
-const var9 = depth(['\\h\\..\\i', '../../d/'], {sort: 'ASC'}, cb);
-// => Result: [ { path: '../../d/', depth: -1 }, { path: '\\h\\..\\i', depth: 1 } ]
-// => Original input: [ '\\h\\..\\i', '../../d/' ]
-// var5 = [
-//     {
-//         "path": "../../d/",
-//         "depth": -1
-//     },
-//     {
-//         "path": "\\h\\..\\i",
-//         "depth": 1
-//     }
-// ]
-```
